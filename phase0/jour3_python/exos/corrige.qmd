@@ -1,0 +1,230 @@
+---
+title: "Corrigés Exos"
+author: "O.SAVRIAMA"
+date: today
+format:  
+  revealjs:  
+    theme: [white, simple]   # clair, moderne (essaie aussi "sky", "beige" ou "serif")
+    slide-number: c/t        # numérotation courante/total
+    progress: true           # barre de progression
+    transition: slide        # effets: slide, fade, convex, concave, zoom
+    code-copy: true          # bouton pour copier le code
+    code-line-numbers: true  # numéros de ligne dans les blocs de code
+    toc: true                # table des matières cliquable
+    toc-depth: 2
+    incremental: true        # apparition progressive des listes
+    chalkboard: true         # permet d’écrire dessus pendant la prez
+    controls: true           # flèches de navigation
+---
+
+# Exercices Python - Corrigés
+
+## 1. Affichage simple
+```python
+print("Bonjour, Python !")
+```
+
+---
+
+## 2. Variables et affichage
+```python
+nom = "Alice"
+print("Bonjour,", nom, "!")
+```
+
+---
+
+## 3. Opérations mathématiques
+```python
+a = int(input("Entrez un nombre : "))
+b = int(input("Entrez un autre nombre : "))
+print("Somme =", a + b)
+```
+
+---
+
+## 4. Calcul de l’âge
+```python
+annee_naissance = int(input("Ton année de naissance : "))
+age = 2025 - annee_naissance
+print("Tu as", age, "ans en 2025.")
+```
+
+---
+
+## 5. Aire d’un rectangle
+```python
+longueur = float(input("Longueur : "))
+largeur = float(input("Largeur : "))
+aire = longueur * largeur
+print("Aire =", aire)
+```
+
+---
+
+## 6. Pair ou impair ?
+```python
+n = int(input("Nombre : "))
+if n % 2 == 0:
+    print("Pair")
+else:
+    print("Impair")
+```
+
+---
+
+## 7. Plus grand nombre
+```python
+a = int(input("Premier nombre : "))
+b = int(input("Deuxième nombre : "))
+print("Le plus grand est", max(a, b))
+```
+
+---
+
+## 8. Conditions multiples
+```python
+age = int(input("Ton âge : "))
+if age < 12:
+    print("Enfant")
+elif age < 18:
+    print("Adolescent")
+else:
+    print("Adulte")
+```
+
+---
+
+## 9. Compte à rebours
+```python
+for i in range(10, 0, -1):
+    print(i)
+```
+
+---
+
+## 10. Somme d’une suite
+```python
+somme = 0
+for i in range(1, 101):
+    somme += i
+print("Somme =", somme)
+```
+
+---
+
+## 11. Table de multiplication
+```python
+n = int(input("Nombre : "))
+for i in range(1, 11):
+    print(n, "x", i, "=", n * i)
+```
+
+---
+
+## 12. Deviner un nombre (simple)
+```python
+import random
+secret = random.randint(1, 10)
+essai = int(input("Devine le nombre (1-10) : "))
+if essai == secret:
+    print("Bravo !")
+else:
+    print("Dommage, c’était", secret)
+```
+
+---
+
+## 13. Liste de nombres
+```python
+nombres = [1, 2, 3, 4, 5]
+for n in nombres:
+    print(n)
+```
+
+---
+
+## 14. Moyenne d’une liste
+```python
+notes = []
+for i in range(5):
+    note = float(input("Note " + str(i+1) + " : "))
+    notes.append(note)
+
+moyenne = sum(notes) / len(notes)
+print("Moyenne =", moyenne)
+```
+
+---
+
+## 15. Recherche dans une liste
+```python
+prenoms = ["Alice", "Bob", "Charlie"]
+nom = input("Entrez un prénom : ")
+if nom in prenoms:
+    print(nom, "est dans la liste.")
+else:
+    print(nom, "n’est pas dans la liste.")
+```
+
+---
+
+## 16. Compter les voyelles
+```python
+phrase = input("Entrez une phrase : ").lower()
+voyelles = "aeiouy"
+compte = 0
+for c in phrase:
+    if c in voyelles:
+        compte += 1
+print("Nombre de voyelles =", compte)
+```
+
+---
+
+## 17. Palindrome
+```python
+mot = input("Mot : ")
+if mot == mot[::-1]:
+    print("C’est un palindrome")
+else:
+    print("Ce n’est pas un palindrome")
+```
+
+---
+
+## 18. Dictionnaire simple
+```python
+perso = {"nom": "Goku", "age": 20, "race": "Saiyan"}
+print("Nom :", perso["nom"])
+print("Âge :", perso["age"])
+```
+
+---
+
+## 19. Fonction carrés
+```python
+def carres(n):
+    return [i**2 for i in range(1, n+1)]
+
+print(carres(5))
+```
+
+---
+
+## 20. Mini-projet : Nombre mystère amélioré
+```python
+import random
+secret = random.randint(1, 100)
+trouve = False
+
+while not trouve:
+    essai = int(input("Devine le nombre (1-100) : "))
+    if essai == secret:
+        print("Bravo !")
+        trouve = True
+    elif essai < secret:
+        print("Trop petit !")
+    else:
+        print("Trop grand !")
+```
