@@ -1,0 +1,165 @@
+---
+title: "Les bases de python"
+author: "O.SAVRIAMA"
+date: today
+format:  
+  revealjs:  
+    theme: [white, simple]   # clair, moderne (essaie aussi "sky", "beige" ou "serif")
+    slide-number: c/t        # numérotation courante/total
+    progress: true           # barre de progression
+    transition: slide        # effets: slide, fade, convex, concave, zoom
+    code-copy: true          # bouton pour copier le code
+    code-line-numbers: true  # numéros de ligne dans les blocs de code
+    toc: true                # table des matières cliquable
+    toc-depth: 2
+    incremental: true        # apparition progressive des listes
+    chalkboard: true         # permet d’écrire dessus pendant la prez
+    controls: true           # flèches de navigation
+---
+
+## 1. Introduction à Python
+- Python est un langage **simple**, **lisible**, utilisé en data, web, IA…  
+- Il fonctionne sur tous les OS (Windows, macOS, Linux).  
+- Tester du code rapidement dans le terminal avec :  
+```bash
+python
+```
+ou écrire un fichier `script.py` et exécuter :  
+```bash
+python script.py
+```
+
+**Premier programme :**
+```python
+print("Bonjour, Guerrier Python !")
+```
+
+---
+
+## 2. Variables et types de base
+En Python, on n’a pas besoin de déclarer le type à l’avance.
+
+```python
+nom = "Goku"        # str (chaîne)
+age = 20            # int (entier)
+taille = 1.75       # float (décimal)
+saiyan = True       # bool (booléen)
+```
+
+Pour vérifier :
+```python
+print(type(nom))
+```
+
+---
+
+## 3. Entrées et sorties
+- `print()` → afficher  
+- `input()` → demander à l’utilisateur (toujours une chaîne)
+
+```python
+prenom = input("Quel est ton prénom ? ")
+print("Bonjour", prenom)
+```
+
+---
+
+## 4. Opérateurs
+- Arithmétiques : `+`, `-`, `*`, `/`, `//`, `%`, `**`
+- Comparaison : `==`, `!=`, `<`, `<=`, `>`
+- Logiques : `and`, `or`, `not`
+
+Exemple :
+```python
+x = 5
+print(x % 2 == 0)  # pair ?
+```
+
+---
+
+## 5. Conditions
+```python
+age = int(input("Ton âge ? "))
+if age >= 18:
+    print("Adulte")
+elif age >= 12:
+    print("Adolescent")
+else:
+    print("Enfant")
+```
+
+---
+
+## 6. Boucles
+### For (connue d’avance)
+```python
+for i in range(5):
+    print(i)
+```
+### While (tant que)
+```python
+n = 0
+while n < 3:
+    print("n vaut", n)
+    n += 1
+```
+
+---
+
+## 7. Listes
+```python
+fruits = ["pomme", "banane", "orange"]
+print(fruits[0])        # accès index
+for f in fruits:        # parcours
+    print(f)
+```
+
+---
+
+## 8. Fonctions
+```python
+def saluer(nom):
+    print("Salut", nom)
+
+saluer("Vegeta")
+```
+
+Avec retour de valeur :
+```python
+def carre(x):
+    return x ** 2
+
+print(carre(5))
+```
+
+---
+
+## 9. Dictionnaires (bonus)
+```python
+perso = {"nom": "Goku", "race": "Saiyan"}
+print(perso["nom"])
+```
+
+---
+
+## 10. Mini-projet guidé : Jeu du nombre mystère
+```python
+import random
+
+secret = random.randint(1, 10)
+trouve = False
+
+while not trouve:
+    essai = int(input("Devine le nombre (1-10) : "))
+    if essai == secret:
+        print("Bravo !")
+        trouve = True
+    elif essai < secret:
+        print("Trop petit !")
+    else:
+        print("Trop grand !")
+```
+
+---
+
+✅ À toi de jouer dans le fichier **exos.md** !
