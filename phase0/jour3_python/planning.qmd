@@ -1,0 +1,42 @@
+---
+title: "La Prairie - J3"
+subtitle: "Phase0"
+author: "O.SAVRIAMA"
+date: today
+format:
+  revealjs:  
+    theme: [white, simple]   # clair, moderne (essaie aussi "sky", "beige" ou "serif")
+    slide-number: c/t        # numérotation courante/total
+    progress: true           # barre de progression
+    transition: slide        # effets: slide, fade, convex, concave, zoom
+    code-copy: true          # bouton pour copier le code
+    code-line-numbers: true  # numéros de ligne dans les blocs de code
+    toc: true                # table des matières cliquable
+    toc-depth: 2
+    incremental: true        # apparition progressive des listes
+    chalkboard: true         # permet d’écrire dessus pendant la prez
+    controls: true           # flèches de navigation
+---
+
+## Jour 3 - Initiation python  
+
+### Matin
+
+  - 8h00 : Météo  
+  - 8h15 : Veille (apprenants) sur python  
+  - 8h30 : Préparation environnement de travail  
+  - 8h45 : Cours python  
+  - **<span style="color:red">9h45 : Pause</span>**  
+  - 10h00: Exos python  
+  - 11h00: Corrections  
+  - **<span style="color:red">11h45: Pause</span>**  
+
+---
+
+### Après-midi
+
+  - 12h45: Projet Python 
+  - **<span style="color:red">14h30: Pause</span>**  
+  - 14h45: Projet Python (Suite) / Restitution  
+  - 15h30: Réflexivité / Météo  
+  - **<span style="color:red">16h00: Fin</span>**  
