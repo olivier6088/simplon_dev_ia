@@ -1,0 +1,293 @@
+---
+title: "Environnements virtuels Python avec `venv`"
+author: "Olivier SAVRIAMA"
+format:
+  revealjs:
+    theme: [default, serif]
+    slide-number: true
+    transition: fade
+    incremental: true
+    code-overflow: wrap
+    code-line-numbers: true
+execute:
+  echo: true
+---
+
+# Objectifs du cours
+
+- Comprendre **ce qu’est `venv`** et pourquoi l’utiliser
+- Savoir **créer / activer / utiliser** un environnement virtuel
+- Gérer les dépendances avec **`pip`** et **`requirements.txt`**
+- Connaître les **bonnes pratiques** d’un petit projet Python
+- Dépanner les erreurs les plus courantes
+
+---
+
+# Le problème
+
+- Plusieurs projets → versions de paquets différentes (ex: `pandas 1.5` vs `2.x`)
+
+- Installer globalement mène à des **conflits** et à de l’**instabilité**
+
+- Besoin d’**isoler** chaque projet pour garantir que «ça marche chez moi et chez toi»
+
+**Solution :** `venv`
+
+---
+
+# Définition
+
+> **`venv`** crée un environnement virtuel :  
+  - un **mini-Python** + **ses bibliothèques**, **dans un dossier du projet**, séparé du reste de la machine.
+
+Conséquences :
+
+- Pas d’interférences entre projets
+
+- Reproductibilité (on peut **recréer** le même environnement)
+
+- On n’a pas besoin de droits admin
+
+---
+
+# Avantages & inconvénients
+
+## ✅ Avantages
+- **Isolation** des versions
+- **Reproductible** via `requirements.txt`
+- **Propreté** : n’altère pas le système
+- **Collaboration** facilitée
+
+## ⚠️ Inconvénients
+- Penser à **activer** le venv
+- Un dossier `.venv/` par projet  
+- Peut sembler «lourd» pour un très petit script
+
+---
+
+# Arborescence type d’un projet
+
+```
+mon-projet/
+├─ .venv/                 # environnement (NE PAS committer)
+├─ src/                   # code source Python
+│  └─ main.py
+├─ tests/                 # (optionnel) tests unitaires
+├─ requirements.txt       # dépendances figées
+└─ README.md
+```
+
+> Ajoutez `.venv/` dans `.gitignore`
+
+---
+
+## ⚠️ Problème courant : Git Bash + venv dans VS Code
+
+Sous **Windows**, l’activation d’un venv avec **Git Bash** peut échouer avec des erreurs comme :
+
+```bash
+bash: uname: command not found
+bash: sed: command not found
+```
+
+👉 Cela arrive car **VS Code lance Git Bash sans charger le profil complet**.
+Certains utilitaires Unix (`uname`, `sed`, …) ne sont alors pas disponibles, ce qui casse le script `activate` du venv.
+
+---
+
+## ✅ Solution : corriger le profil Git Bash dans VS Code
+
+1. Ouvrir **Paramètres JSON** :
+
+   * `Ctrl + Shift + P` → taper *Preferences: Open Settings (JSON)*.
+
+2. Ajouter la configuration suivante :
+
+```json
+"terminal.integrated.profiles.windows": {
+  "Git Bash": {
+    "path": "C:\\Program Files\\Git\\bin\\bash.exe",
+    "args": ["-l"],
+    "icon": "terminal-bash"
+  }
+},
+"terminal.integrated.defaultProfile.windows": "Git Bash"
+```
+
+---
+
+3. Sauvegarder, puis relancer le terminal Git Bash dans VS Code.
+
+4. Vérifier que les utilitaires sont accessibles :
+
+```bash
+which uname
+which sed
+```
+
+---
+
+## 🚀 Résultat attendu
+
+* L’activation du venv via Git Bash fonctionne normalement :
+
+```bash
+source .venv/Scripts/activate
+(.venv)
+```
+
+* L’environnement est identique à celui obtenu avec Git Bash lancé en dehors de VS Code.
+
+---
+
+## Étape 1 — Créer l’environnement
+
+Dans le dossier du projet :
+
+```bash
+python -m venv .venv
+```
+
+> Choisir une version précise si besoin :
+
+> `python3.11 -m venv .venv`
+
+---
+
+## Étape 2 — Activer / Désactiver
+
+**macOS / Linux (bash/zsh)**
+```bash
+source .venv/bin/activate
+```
+
+**Windows PowerShell**
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+**Désactiver** (toutes plateformes)
+```bash
+deactivate
+```
+
+---
+
+## Étape 3 — Mettre à jour `pip` et installer des paquets
+
+```bash
+python -m pip install --upgrade pip
+pip install pandas requests
+```
+
+**Vérifier**
+```bash
+python -c "import sys, pandas; print(sys.executable); print(pandas.__version__)"
+```
+
+---
+
+## Étape 4 — Geler et partager les dépendances
+
+**Exporter** l’état actuel :
+
+```bash
+pip freeze > requirements.txt
+```
+
+**Recréer** plus tard (ou par un·e collègue) :
+
+```bash
+python -m venv .venv
+source .venv/bin/activate   # (Windows: .venv\Scripts\Activate.ps1)
+pip install -r requirements.txt
+```
+
+---
+
+## Exemple minimal de code (src/main.py)
+
+```python
+from datetime import datetime
+
+def hello(name: str) -> str:
+    return f"Bonjour {name}! Nous sommes le {datetime.now():%Y-%m-%d}."
+
+if __name__ == "__main__":
+    print(hello("Pythonista"))
+```
+
+**Exécuter**
+
+```bash
+python src/main.py
+```
+
+---
+
+## Astuces d’équipe
+
+- **Même version de Python** (ex: 3.11) notée dans le README
+- `requirements.txt` **committé**
+
+---
+
+## Dépannage courant
+
+**Paquet introuvable** pendant l’exécution :
+
+- Le venv n’est pas activé : activez-le puis `pip install ...`
+
+**PowerShell bloque l’activation (Windows)** :
+
+- Ouvrir PowerShell en tant qu’utilisateur et exécuter :
+
+  ```powershell
+  Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+  ```
+
+  (Fermez/réouvrez le terminal ensuite.)
+
+**Plusieurs Pythons installés** :
+
+- Ciblez la version : `python3.11 -m venv .venv`
+
+---
+
+## Alternatives (bref panorama)
+
+- **pipx** : pour installer des **outils** en CLI isolés
+
+- **pip-tools / uv** : gestion/épingle des versions avancée
+
+- **conda / mamba** : environnements + paquets natifs (scientifique)
+
+- Pour débuter sur un petit projet, **`venv` + `pip`** suffit largement
+
+---
+
+## Exercices rapides
+
+1) Créez un projet `demo-venv`, initialisez `.venv`, activez-le
+
+2) Installez `requests` et écrivez un petit script qui `GET` une API publique
+
+3) Générez `requirements.txt`
+
+4) Supprimez `.venv/`, recréez-le et réinstallez `-r requirements.txt` : ça doit **re-fonctionner**
+
+---
+
+# Récapitulatif
+
+- `venv` = **isoler** + **maîtriser** les dépendances
+
+- Étapes : créer → activer → installer → geler → rejouer
+
+- Mettez `.venv/` en **.gitignore**, partagez `requirements.txt`
+
+- Vérifiez l’interpréteur : `python -c "import sys; print(sys.executable)"`
+
+
+
+**À vous de jouer !**
