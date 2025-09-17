@@ -1,0 +1,271 @@
+---
+title: "SQL - Niveau 1"
+author: "Olivier SAVRIAMA"
+date: today
+format:
+  revealjs:  
+    theme: [white, simple]
+    slide-number: c/t
+    progress: true
+    transition: slide
+    code-copy: true
+    code-line-numbers: true
+    toc: true
+    toc-depth: 2
+    incremental: true
+    chalkboard: true
+    controls: true
+    scrollable: true
+---
+
+## Bienvenue 👋
+
+- Objectif du jour : **comprendre** et **pratiquer** les bases de SQL via l’univers **Dragon Ball Z**:  
+  - SGBD
+  - tables & clés
+  - **types**
+  - **instructions** (CREATE/INSERT/SELECT/ALTER/UPDATE/DELETE)
+  - **contraintes**
+
+---
+
+## Plan & repères
+
+1) Introduction aux **SGBD**  
+2) Bases relationnelles (tables, PK/FK, schéma)  
+3) **Types** (SQLite)  
+4) **Instructions** SQL : DDL / DML / DQL  
+5) **CRUD (Create, Read, Update, Delete)**
+6) **Contraintes**  
+7) Mini-projet guidé (DBZ)
+
+---
+
+## 1) Introduction aux SGBD
+
+- **SGBD** : logiciel qui stocke, protège et permet de requêter les données.  
+- Exemples : SQLite, PostgreSQL, MySQL, SQL Server.
+- On pratique avec **SQLite** (base = fichier `.db`).
+
+**Pourquoi SQLite ?** rapide, portable, parfait pour l’apprentissage.
+
+::: notes
+Question brise-glace : “Qui a déjà utilisé Excel ?” → faire le parallèle “feuilles” vs “tables”.
+:::
+
+---
+
+## 2) Bases relationnelles — concepts
+
+- **Table** = lignes (enregistrements) × colonnes (attributs)  
+- **PK (clé primaire)** = identifiant unique (ex. `id`)  
+- **FK (clé étrangère)** = lien vers une autre table (référence)  
+- **Schéma** = description des tables, colonnes et contraintes
+
+**Exemple, tables de l'univers DBZ** : `teams` (équipes), `characters` (personnages), `sagas`, `battles`, `character_battles` (participations)
+
+::: notes
+Astuce visuelle : dessiner sur le tableau `teams (id, name)` → `characters (team_id → teams.id)`.
+:::
+
+---
+
+## 3) Types (SQLite)
+
+- **INTEGER** (entiers), **REAL** (réels), **TEXT** (chaînes), **BLOB** (binaire)  
+- `NULL` = absence de valeur (≠ `0` ou `''`)
+- D’autres SGBD ajoutent `DATE`, `TIMESTAMP`, `BOOLEAN`, etc.
+
+**Règle simple** : choisissez le type **le plus simple** qui convient.
+
+---
+
+## 4) Les instructions SQL
+
+- **DDL** (définition) : `CREATE`, `ALTER`, `DROP`  
+- **DML** (manipulation) : `INSERT`, `UPDATE`, `DELETE`  
+- **DQL** (requête) : `SELECT`
+
+---
+
+## CREATE — créer une table
+
+On va créer 2 tables minimales pour démarrer.
+
+```sql
+-- 1) Table des équipes
+CREATE TABLE IF NOT EXISTS teams (
+  id   INTEGER PRIMARY KEY,
+  name TEXT    NOT NULL,
+  base TEXT
+);
+
+-- 2) Table des personnages (référence vers teams)
+CREATE TABLE IF NOT EXISTS characters (
+  id          INTEGER PRIMARY KEY,
+  name        TEXT    NOT NULL,
+  race        TEXT,
+  power_level INTEGER,
+  team_id     INTEGER,
+  FOREIGN KEY (team_id) REFERENCES teams(id)
+);
+```
+
+::: notes
+Démonstration live :
+1) Créer les tables  
+2) Montrer qu’aucune ligne n’existe encore (`SELECT * FROM teams;`)
+:::
+
+---
+
+## INSERT — ajouter des lignes
+
+```sql
+INSERT INTO teams (id, name, base) VALUES
+  (1, 'Z-Fighters', 'Kame House'),
+  (2, 'Forces de Freezer', 'Vaisseau de Freezer');
+
+INSERT INTO characters (id, name, race, power_level, team_id) VALUES
+  (1, 'Goku',    'Saiyan',        3000000, 1),
+  (2, 'Vegeta',  'Saiyan',        2500000, 1),
+  (3, 'Piccolo', 'Namekian',      1200000, 1),
+  (4, 'Krillin', 'Humain',         300000, 1);
+```
+
+**Astuce** : `INSERT` multi-lignes pour remplir plus vite.
+
+---
+
+## SELECT — lire les données
+
+```sql
+-- Toutes les colonnes
+SELECT * FROM teams;
+
+-- Colonnes choisies + tri + limite
+SELECT id, name, base
+FROM teams
+ORDER BY name ASC
+LIMIT 5;
+```
+
+**Bon réflexe** : afficher seulement les colonnes utiles (éviter `SELECT *` en prod).
+
+::: notes
+Mini-quiz : “Comment afficher seulement `name` et `power_level` de `characters` triés par puissance décroissante ?”
+:::
+
+---
+
+## ALTER — changer la structure
+
+```sql
+ALTER TABLE teams ADD COLUMN created_at TEXT;
+```
+
+- Sert à **ajouter** une colonne (SQLite).  
+- Dans d’autres SGBD, on peut aussi **renommer**, **changer le type**, etc.
+
+---
+
+## UPDATE — modifier des valeurs
+
+```sql
+UPDATE teams
+SET base = 'Capsule Corp.'
+WHERE name = 'Z-Fighters';
+```
+
+**Sécurité** : toujours tester le `WHERE` avec un `SELECT` avant le `UPDATE`.
+
+---
+
+## ⚠️ Sécurité avec UPDATE / DELETE
+
+- Avant d’exécuter un `UPDATE` ou `DELETE`, **toujours tester un `SELECT` avec un `WHERE`**.  
+- Cela évite les erreurs de mise à jour/suppression massive. 
+Exemple :
+```sql
+-- Étape 1 : tester
+SELECT * FROM characters
+WHERE name = 'Goku';
+-- Étape 2 : appliquer
+UPDATE characters
+SET power_level = power_level * 2
+WHERE name = 'Goku';
+```
+👉 Résultat : seul **Goku** est modifié, pas toute la table.
+
+---
+
+## DELETE — supprimer des valeurs
+
+```sql
+DELETE FROM teams
+WHERE name = 'Forces de Freezer';
+```
+
+⚠️ : sans `WHERE`, on supprime **toutes** les lignes.
+
+---
+
+## Contraintes (rappel)
+
+- `PRIMARY KEY` : unicité + identité  
+- `NOT NULL` : valeur obligatoire  
+- `UNIQUE` : pas de doublon  
+- `CHECK` : règle métier (ex. `power_level > 0`)  
+- `FOREIGN KEY` : cohérence entre tables
+
+---
+
+**Exemple** (PK + NOT NULL + FK) :
+
+```sql
+CREATE TABLE IF NOT EXISTS characters (
+  id          INTEGER PRIMARY KEY,
+  name        TEXT NOT NULL,
+  race        TEXT,
+  power_level INTEGER,
+  team_id     INTEGER,
+  FOREIGN KEY (team_id) REFERENCES teams(id)
+);
+```
+
+---
+
+## Erreurs fréquentes & solutions
+
+- Oublier le `WHERE` → mises à jour/suppressions massives non voulues  
+- Conflits de PK/UNIQUE → vérifier les valeurs de `id`/`name`  
+- FK non respectée → la valeur référencée n’existe pas dans la table parent  
+- Virgule manquante dans `INSERT` multi-lignes  
+- Majuscules/minuscules : SQL est tolérant pour les mots-clés, pas pour les valeurs
+
+---
+
+# Récap express (à retenir)
+
+- **Tables** + **PK/FK** = base du relationnel  
+- **Types** simples (INTEGER / REAL / TEXT) suffisent souvent  
+- **CRUD** : CREATE → INSERT → SELECT → ALTER/UPDATE/DELETE  
+- **Contraintes** → data propre et fiable  
+- Tester **par petites étapes**, souvent !
+
+---
+
+## Pour aller plus loin (après-cours)
+
+- Ajouter une contrainte `CHECK (power_level > 0)` sur `characters`  
+- Introduire `DISTINCT`, `LIMIT`, `ORDER BY` systématiquement  
+- Préparer le **Niveau 2** : JOINs, HAVING, CASE, sous-requêtes
+
+::: notes
+Clore en rappelant où se trouvent les notebooks/exercices.
+Encourager à pratiquer régulièrement.
+:::
+
+---
+
+Fin 🎉
