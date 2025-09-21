@@ -1,5 +1,10 @@
 # 📚 Formation SQL Niveau 1 - CRUD
 
+## Planning
+
+- Matin: Veille sur SQL niveau1
+- Après-midi: Exercices sur une bdd sqlite  
+
 ## 🚀 Guide d’installation
 
 ### 1. Installer Python et Jupyter
