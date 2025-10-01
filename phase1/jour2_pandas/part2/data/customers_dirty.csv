@@ -1,0 +1,6 @@
+id,name,age,city
+1,Alice,25.0,paris
+2,Bob,,LYON
+3,Charlie,40.0,Marseille
+4,Alice,25.0,paris
+5,Ethan,32.0,
