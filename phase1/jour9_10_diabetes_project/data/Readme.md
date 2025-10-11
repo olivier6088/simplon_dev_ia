@@ -2,10 +2,10 @@
 
 ## Objectif
 
-Travailler sur la situation professionnelle de **création d'une PoC de détection du diabète**:   
+Travailler sur la situation professionnelle simplonline de **création d'une PoC de détection du diabète**:   
 https://simplonline.co/trainer-workspace/professional-situations/de69eece-0a6b-4c8a-8046-295742449506
 
-Cette situation professionnelle est constituée de 6 briefs:  
+Cette situation professionnelle est constituée de **6 briefs** sur simplonline:  
 1. ML 1 - Extraction et préparation d'un dataset sur le diabète:  
 https://simplonline.co/classrooms/7e241420-5d90-49b0-ac98-5cf0e55b4a0b/briefs/52fab772-6ba1-4cf0-860f-501fbd7aec44
 2. ML 2 - Entraînement d'un modèle prédictif sur le diabète:  
